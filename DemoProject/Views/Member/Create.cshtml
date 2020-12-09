@@ -1,0 +1,175 @@
+﻿@model DemoProject.Models.MemberViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3 style="text-align:center">Add new member</h3>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" id="FirstName" class="form-control" tabindex="1">
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Lastname" class="control-label"></label>
+                        <input asp-for="Lastname" id="Lastname" class="form-control " tabindex="2">
+                        <span asp-validation-for="Lastname" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Country" class="control-label"></label>
+                        @*<input asp-for="Country" id="country" class="form-control" tabindex="3">*@
+                        <select asp-for="Country" id="country" class="form-control">
+                            <option value="" selected="selected">Select Country</option>
+                        </select>
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="City" class="control-label"></label>
+                        @*<input asp-for="City" id="city" class="form-control" tabindex="4">*@
+                        <select asp-for="City" id="city" class="form-control">
+                            <option value="" selected="selected">Select City</option>
+                        </select>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Gender" class="control-label" style="display:block"></label>
+                        <label><input asp-for="Gender" value="Male" type="radio" style="margin-right: 5px;" />Male</label>
+                        <label><input asp-for="Gender" value="Female" type="radio" style="margin-right: 5px;" />Female</label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DateOfBirth" class="control-label"></label>
+                        <input asp-for="DateOfBirth" name="data_of_birth" id="data_of_birth" class="form-control " tabindex="7">
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label"></label>
+                        <input asp-for="PhoneNumber" id="PhoneNumber" class="form-control" tabindex="8">
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="EmailId" class="control-label"></label>
+                        <input asp-for="EmailId" type="email" id="EmailId" class="form-control " tabindex="9">
+                        <span asp-validation-for="EmailId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes" class="control-label"></label>
+                <textarea asp-for="Notes" class="form-control" id="notes" rows="3"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="MemberStatus" /> @Html.DisplayNameFor(model => model.MemberStatus)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-dark" />
+                <button class="btn btn-dark" onclick="RedirectToIndex()">View All Members</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="ProfileImage" style="display:block" class="control-label"></label>
+            <img ID="imagePreview" src="~/images/default-avatar.png" style="display:block;max-height:375px;max-width">
+            <div class="custom-file col-md-6">
+                <input asp-for="ProfileImage" class="custom-file-input" id="customFile" onchange="ShowImagePreview(this);">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div id="divSuccessMessage">
+    "Record Added Successfully!!!"
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript">
+
+    window.onload = function () {
+            $('#divSuccessMessage').hide();
+            if ('@ViewBag.successMessage' == "Successfull" )
+            {
+               $('#divSuccessMessage').show();
+            }
+            else
+            {
+              $('#divSuccessMessage').hide();
+            }
+            var stateObject = {
+                "India": {
+                    "Delhi": ["new Delhi", "North Delhi"],
+                    "Kerala": ["Thiruvananthapuram", "Palakkad"],
+                    "Goa": ["North Goa", "South Goa"],
+                },
+                "Australia": {
+                    "South Australia": ["Dunstan", "Mitchell"],
+                    "Victoria": ["Altona", "Euroa"]
+                }, "Canada": {
+                    "Alberta": ["Acadia", "Bighorn"],
+                    "Columbia": ["Washington", ""]
+                },
+            }
+
+            var countySel = document.getElementById("country");
+            citySel = document.getElementById("city");
+
+            for (var country in stateObject) {
+                countySel.options[countySel.options.length] = new Option(country, country);
+            }
+            countySel.onchange = function () {
+                citySel.length = 1; // remove all options bar first
+                if (this.selectedIndex < 1) return; 
+                for (var city in stateObject[this.value]) {
+                    citySel.options[citySel.options.length] = new Option(city, city);
+                }
+            }
+            countySel.onchange(); // reset in case page is reloaded
+        }
+        function ShowImagePreview(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function RedirectToIndex() {
+            window.location.href = "/Member/Index"
+        }
+
+</script>
+}
